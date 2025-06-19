@@ -1,54 +1,43 @@
-# React + TypeScript + Vite
+# Reflection Questions
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 1. How did I handle state updates when the text changed?
 
-Currently, two official plugins are available:
+I used `useState` in React to manage both the input (`text`) and statistics (`stats`).  
+- `setText` updates the current text.  
+- `setStats` updates word/character counts using the latest input.  
+- I used the functional form of `setStats` to avoid stale data during rapid input.  
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This ensured accurate, real-time updates while typing.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 2. What considerations did I make when calculating reading time?
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+- Split the text by spaces, filtering out empty values.  
+- Assumed 200 words per minute as the average reading speed.  
+- Calculated reading time and displayed it in `mm:ss` format.  
+- Rounded to two decimals for clarity.  
+- Compared against a target reading time to apply conditional styling (green/yellow).  
+- Handled empty input by setting time to `0`.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 3. How did I ensure the UI remained responsive during rapid text input?
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+- Kept calculations lightweight (e.g., `text.length` for characters).  
+- Let React handle efficient updates.  
+- Directly bound the text input to state.  
+- Used Tailwind CSS to maintain layout stability.  
+- Tested fast typing on both desktop and mobile for smooth performance.
+
+---
+
+## 4. What challenges did I face when implementing the statistics calculations?
+
+- **Word count**: Handled extra spaces and blank input.  
+- **Zero input**: Ensured the app didn’t break with empty strings.  
+- **Reading time**: Selected 200 wpm and made results readable.  
+- **Time formatting**: Learned how to convert to proper `mm:ss` format.  
+- **Performance**: Simplified logic to avoid slowing the app.
+
+Fixing these edge cases helped create a reliable and fast experience.
